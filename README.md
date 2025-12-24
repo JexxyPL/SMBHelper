@@ -33,10 +33,10 @@ g++ main.cpp icon.o -static -o smbhelper64.exe
 
 # Features
 
-Automatically generates config ready to copy-paste
-Writes the changes into smb.conf (Only if the user agrees)
-Automatic backups when writing into smb.conf
-Preview the configuration before applying
-Written in C++
+-   Automatically generates config ready to copy-paste
+-   Writes the changes into smb.conf (Only if the user agrees)
+-   Automatic backups when writing into smb.conf
+-   Preview the configuration before applying
+-   Written in C++
 
 ===================
