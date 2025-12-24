@@ -28,7 +28,7 @@ windres icon.rc icon.o
 ```
 
 ```bash
-g++ main.cpp icon.o -static -o smbhelper64.exe
+g++ main.cpp icon.o -static -o smbhelper.exe
 ```
 
 # Features
