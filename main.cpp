@@ -321,8 +321,14 @@ int main() {
             }
             if(std::filesystem::exists(options.path) == false) {
                 if(AskYesNo("This path doesn't exist! Do you wish to create it? ")) {
-                    std::filesystem::create_directories(options.path);
-                    std::cout << "Share path successfully created! Thank you for using my tool\n";
+                    try {
+                        std::filesystem::create_directories(options.path);
+                        std::cout << "Successfully created the directory at: " << options.path << '\n';
+                    }
+                    catch(const std::filesystem::filesystem_error& errpath) {
+                        std::cerr << "FAILED TO CREATE THE DIRECTORY: " << errpath.what() << '\n';
+                    }
+                    std::cout << "Thanks for using my tool! You might need to restart samba for changes to take effect.\n";
                 }
             }
         }
