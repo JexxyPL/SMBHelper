@@ -321,7 +321,7 @@ int main() {
             }
             if(std::filesystem::exists(options.path) == false) {
                 if(AskYesNo("This path doesn't exist! Do you wish to create it? ")) {
-                    system(("sudo -S mkdir -p " + options.path).c_str());
+                    std::filesystem::create_directories(options.path);
                     std::cout << "Share path successfully created! Thank you for using my tool\n";
                 }
             }
