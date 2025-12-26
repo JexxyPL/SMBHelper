@@ -30,7 +30,7 @@ windres icon.rc icon.o
 ```bash
 g++ main.cpp icon.o -static -o smbhelper.exe
 ```
-
+Just make sure the C++ compiler is installed
 # Features
 
 -   Automatically generates config ready to copy-paste
