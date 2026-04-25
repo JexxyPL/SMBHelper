@@ -3,13 +3,14 @@
 #include <fstream>
 #include <limits>
 #include <filesystem>
+#include <vector>
 struct Options {
     std::string name = "";
     std::string path = "";
     bool browsable = false;
-    bool writable = false;
     bool guestok = false;
     bool readonly = true;
+    std::vector<std::string> validusers;
     std::string createmask = "";
     std::string directorymask = "";
 };
@@ -199,15 +200,30 @@ void Makeconf(Options* options) {
             }
         }
         options->browsable = AskYesNo("Do you want this share to be browsable? ");
-        options->writable = AskYesNo("Do you want this share to be writable? ");
         options->guestok = AskYesNo("Do you want this share to allow guest access? ");
+        if(AskYesNo("Do you want to specify valid users for this share? ")) {
+            std::string user = "";
+            while(true) {
+                std::cout << "Enter a valid user (or 'exit' to finish): ";
+                std::getline(std::cin,user);
+                if(user == "exit") {
+                    break;
+                }
+                options->validusers.push_back(user);
+            }
+        }
+
         options->readonly = AskYesNo("Do you want this share to be read only? ",false);
         // Final check (info)
         std::cout << "Config name: " << options->name << '\n';
         std::cout << "Path: " << options->path << '\n';
         std::cout << "Browsable: " << (options->browsable ? "Yes" : "No") << '\n'; 
-        std::cout << "Writable: " << (options->writable ? "Yes" : "No") << '\n';
         std::cout << "Guest access: " << (options->guestok ? "Yes" : "No") << '\n';
+        std::cout << "Valid users: ";
+        for(const std::string& user : options->validusers) {
+            std::cout << user << " ";
+        }
+        std::cout << '\n';
         std::cout << "Read only: " << (options->readonly ? "Yes" : "No") << '\n';
         for(int i = 0; i < 6; i++) {
             if(filemasks[i][0] == options->createmask) {
@@ -244,8 +260,14 @@ std::string Generate(Options* options) {
     config += "[" + options->name + "]\n";
     config += "path = " + options->path + '\n';
     config += "browsable = " + std::string(options->browsable ? "yes" : "no") + '\n';
-    config += "writable = " + std::string(options->writable ? "yes" : "no") + '\n';
     config += "guest ok = " + std::string(options->guestok ? "yes" : "no") + '\n';
+    if(!options->validusers.empty()) {
+        config += "valid users = ";
+        for(const std::string& user : options->validusers) {
+            config += user + " ";
+        }
+        config += '\n';
+    }
     config += "read only = " + std::string(options->readonly ? "yes" : "no") + '\n';
     config += "create mask = " + options->createmask + '\n';
     config += "directory mask = " + options->directorymask + '\n';
